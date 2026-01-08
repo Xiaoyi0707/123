@@ -491,25 +491,43 @@ body {
 <div id="QQQL">一間將溫度與創意融入設計的個人設計工作室。專注於平面設計、品牌識別、插畫與創意視覺整合。&nbsp; &nbsp; 適合文創、藝文品牌、新創企業與個人形象設計合作等。</div>
 <div id="QQQR">
 <!-- ===== 幻燈片開始 ===== -->
-<div style="position: relative; width: 85%; height: 350px; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+<div style="position: relative; width: 85%; height: 350px; border-radius: 8px; overflow: hidden; margin: 20px 0">
 <!-- 幻燈片容器 -->
-<div style="position: relative; width: 100%; height: 100%;">
+<div style="position: relative; width: 100%; height: 100%">
 <!-- 第 1 頁 -->
-<div id="slide0" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 50;">
-<img src="結合.png" alt="幻燈片 1" style="width: 80%; height: 80%; object-fit: cover; margin-left: 197px; margin-top: 58px">
+<div id="slide0" style="position: absolute; width: 110%; height: 110%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 50;">
+<img src="結合.png" alt="幻燈片 1" style="height: 80%; object-fit: cover; margin-left: 200px; margin-top: 50px; width: 80%;">
 </div>
 <!-- 第 2 頁 -->
-<div id="slide1" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0;">
-<img src="images/slide2.jpg" alt="幻燈片 2" style="width: 100%; height: 100%; object-fit: cover;">
+<div id="slide1" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0;            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); 
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); 
+            -webkit-mask-composite: source-in; 
+            mask-composite: intersect;" 
+     alt="羽化效果圖片"><img src="images/上課作業/25.01.19-3.jpg" alt="幻燈片 2" style="width: 100%; height: 100%; object-fit: cover;transform: translateY(15px);">
 </div>
 <!-- 第 3 頁 -->
-<div id="slide2" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0;">
-<img src="images/slide3.jpg" alt="幻燈片 3" style="width: 100%; height: 100%; object-fit: cover;">
+<div id="slide2" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0; display: flex; justify-content: center; align-items: center;">
+    <img src="images/插畫/24.12.10.png" alt="幻燈片 3" 
+         style="width: 120%; 
+                height: auto; 
+                object-fit: contain; 
+                transform: translateY(15px);
+                /* 核心修正：將 black 的範圍縮小到中間一點點，讓四周有極長的透明過渡 */
+                -webkit-mask-image: 
+                    linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%), 
+                    linear-gradient(to bottom, transparent 0%, black 40%, black 60%, transparent 100%);
+                mask-image: 
+                    linear-gradient(to right, transparent 0%, black 40%, black 60%, transparent 100%), 
+                    linear-gradient(to bottom, transparent 0%, black 40%, black 60%, transparent 100%);
+                -webkit-mask-composite: source-in;
+                mask-composite: intersect;">
 </div>
 <!-- 第 4 頁 -->
-<div id="slide3" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0;">
-<img src="images/slide4.jpg" alt="幻燈片 4" style="width: 100%; height: 100%; object-fit: cover;">
-</div>
+<div id="slide3" style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 0.3s ease-in-out; top: 0; left: 0;            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); 
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); 
+            -webkit-mask-composite: source-in; 
+            mask-composite: intersect;" 
+     alt="羽化效果圖片"> <img src="images/插畫/23.12.27.jpg" alt="幻燈片 4" style="width: 100%; height: 100%; object-fit: cover;transform: translateY(15px);">
 </div>
 
 <!-- 指示器按鈕 -->
@@ -617,33 +635,33 @@ body {
 <div class="works-grid">
 <!-- 作品 1: 海報 -->
 <div class="work-item" onclick="goCategory('poster.html')">
-<img src="logo.png" alt="海報作品" />
+<img src="images/海報/24.11.26.jpg" alt="海報作品" />
 <div class="work-item-overlay">海報</div>
 </div>
 <!-- 作品 2: 插畫 -->
 <div class="work-item" onclick="goCategory('illustration.html')">
-<img src="images/poster.jpg" alt="插畫作品" />
+<img src="images/插畫/25.11.10.jpg" alt="插畫作品" />
 <div class="work-item-overlay">插畫</div>
 </div>
 <!-- 作品 3: CIS -->
 <div class="work-item" onclick="goCategory('cis.html')">
-<img src="images/cis.jpg" alt="CIS 作品" />
-<div class="work-item-overlay">CIS</div>
+<img src="images/LOGO&文字/25.01.09.jpg" alt="CIS 作品" />
+<div class="work-item-overlay">LOGO / 文字</div>
 </div>
 <!-- 作品 4: 專題 -->
 <div class="work-item" onclick="goCategory('topic.html')">
-<img src="images/topic.jpg" alt="專題作品" />
-<div class="work-item-overlay">動畫 / 剪輯</div>
+<img src="images/插畫/24.12.10.png" alt="專題作品" />
+<div class="work-item-overlay">包裝</div>
 </div>
 <!-- 作品 5: 預留 -->
 <div class="work-item">
-<img src="images/reserve1.jpg" alt="預留作品 1" />
-<div class="work-item-overlay">專題</div>
+<img src="images/上課作業/24.12.26-2.jpg" alt="預留作品 1" />
+<div class="work-item-overlay">上課作業</div>
 </div>
 <!-- 作品 6: 預留 -->
 <div class="work-item">
-<img src="images/reserve2.jpg" alt="預留作品 2" />
-<div class="work-item-overlay">雜七雜八</div>
+<img src="images/建模&動畫/25.12.23.mp4" alt="預留作品 2" />
+<div class="work-item-overlay">建模 / 動畫</div>
 </div>
 </div>
 </section>
