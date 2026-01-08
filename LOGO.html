@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動藝廊 | Xiaoyi.design</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F2F3DB;
+            --accent-color: #9EB0B4;
+            --main-color: #6F7C7F;
+            --white: #ffffff;
+            --hover-color: #4A5D4F;
+            --sidebar-width: 180px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #333;
+            padding: 40px 20px;
+            /* 為左側側邊欄預留空間 */
+            padding-left: calc(var(--sidebar-width) + 40px);
+        }
+
+        /* ===== 側邊導覽欄樣式 (已移至左側) ===== */
+        .sidebar {
+            position: fixed;
+            left: 40px; /* 改為 left */
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+            border-right: 2px solid var(--main-color); /* 改為右邊框 */
+            padding-right: 20px; /* 改為右內距 */
+            text-align: right; /* 文字改為靠右，對齊邊框 */
+        }
+
+        .sidebar-title {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-link {
+            text-decoration: none;
+            color: var(--main-color);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* 內容靠右對齊 */
+            gap: 8px;
+        }
+
+        .sidebar-link:hover {
+            color: var(--hover-color);
+            transform: translateX(-8px); /* 向左微移 */
+        }
+
+        .sidebar-link.home {
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--hover-color);
+        }
+
+        .sidebar-link::after { /* 改為 after，放在文字右側 */
+            content: '';
+            width: 0;
+            height: 1.5px;
+            background-color: var(--hover-color);
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-link:hover::after {
+            width: 15px;
+        }
+
+        /* ===== 原有佈局調整 ===== */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--main-color);
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--accent-color);
+            font-size: 1rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            width: 100%;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            border-radius: 8px;
+            background-color: transparent;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.3s ease;
+        }
+
+        /* 針對圖片 1 和 2 的特殊處理 */
+        .gallery-item.special-fit img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 單獨調整圖片 1 的位置：往右偏移 */
+        .gallery-item.image-1 img {
+            object-position: 0% center; 
+        }
+
+        /* 單獨調整圖片 6 的放大效果 */
+        .gallery-item.image-6 img {
+            transform: scale(1.2); /* 放大 1.2 倍，可根據需要調整 */
+            object-fit: cover;
+        }
+        
+        /* 確保圖片 6 在 hover 時也能保持放大基礎 */
+        .gallery-item.image-6:hover img {
+            transform: scale(1.3); /* hover 時再稍微放大一點 */
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.8);
+        }
+
+        .gallery-item::after {
+            content: 'VIEW DETAILS';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid white;
+            padding: 8px 15px;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        /* 燈箱彈窗 (Modal) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            width: 90%;
+            max-width: 1100px;
+            max-height: 85vh;
+            display: flex;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-image {
+            flex: 1.6;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-image img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+        }
+
+        .modal-info {
+            flex: 1;
+            padding: 50px;
+            overflow-y: auto;
+            background-color: var(--bg-color);
+            border-left: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .modal-info h2 {
+            color: var(--main-color);
+            margin-bottom: 15px;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .modal-info .category {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .modal-info .description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            text-align: justify;
+            font-size: 1rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            color: var(--main-color);
+            font-size: 35px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+            color: #333;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 1200px) {
+            body {
+                padding-left: 20px; /* 恢復左邊距 */
+            }
+            .sidebar {
+                position: relative;
+                left: auto;
+                top: auto;
+
+                transform: none;
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                border-right: none;
+                border-bottom: 2px solid var(--main-color);
+                padding: 0 0 20px 0;
+                margin-bottom: 40px;
+                gap: 20px;
+                text-align: center;
+            }
+            .sidebar-link {
+                justify-content: center;
+            }
+            .sidebar-link::after {
+                display: none; /* 手機版隱藏裝飾線 */
+            }
+            .sidebar-title {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .modal-content {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .modal-image {
+                flex: none;
+                height: 350px;
+            }
+            .modal-info {
+                padding: 30px;
+            }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 側邊導覽欄 (已移至左側) ===== -->
+    <nav class="sidebar">
+        <div class="sidebar-title">Navigation</div>
+        <a href="index.html" class="sidebar-link home">返回首頁 ❯</a>
+        
+        <div class="sidebar-title" style="margin-top: 10px;">Categories</div>
+        <a href="包裝.html" class="sidebar-link">包裝</a>
+        <a href="上課作業.html" class="sidebar-link">上課作業</a>
+        <a href="animation.html" class="sidebar-link">建模 / 動畫插畫</a>
+        <a href="海報05.html" class="sidebar-link">海報</a>
+        <a href="插畫.html" class="sidebar-link">插畫</a>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>LOGO/文字</h1>
+            <p>點擊海報查看詳細設計論述與創作理念</p>
+        </header>
+
+        <div class="gallery-grid" id="gallery">
+            <!-- 作品資料將透過 JS 生成 -->
+        </div>
+</div>
+
+    <!-- 燈箱結構 -->
+    <div class="modal" id="modal">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <div class="modal-content">
+            <div class="modal-image">
+                <img src="123.jpg" id="modalImg" alt="大圖">
+            </div>
+            <div class="modal-info">
+                <span class="category" id="modalCat">CATEGORY</span>
+                <h2 id="modalTitle">作品標題</h2>
+                <p class="description" id="modalDesc">這裡會顯示作品的詳細論述...</p>
+                <div style="border-top: 1px solid #ddd; padding-top: 20px;">
+                    <p style="font-size: 0.8rem; color: #999;">Xiaoyi.design Portfolio © 2025</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 作品資料庫
+        const works = [
+            {
+                title: "品牌識別設計",
+                category: "BRANDING / 2024",
+                thumb: "images/LOGO&文字/24.11.28.jpg",
+                desc: "這項作品旨在探討色彩與情感的連結。透過 #6F7C7F 的沉穩與 #9EB0B4 的輕盈，我們為品牌打造了一個既專業又不失溫度的視覺系統。設計過程中特別注重線條的簡潔度，確保在各種媒介上都能完美呈現。",
+                isSpecial: true,
+                id: "image-1"
+            },
+            {
+                title: "溫暖插畫系列",
+                category: "ILLUSTRATION / 2023",
+                thumb: "images/LOGO&文字/24.12.12.jpg",
+                desc: "這是一系列關於生活細節的觀察。我使用了大量的柔邊羽化效果，讓畫面呈現出一種夢幻且寧靜的氛圍。希望觀者在看到這幅畫時，能感受到內心的平靜與溫暖。",
+                isSpecial: true
+            },
+            {
+                title: "視覺整合實驗",
+                category: "VISUAL DESIGN / 2025",
+                thumb: "images/LOGO&文字/25.01.09.jpg",
+                desc: "本專案嘗試挑戰傳統的版面配置。透過非對稱的構圖與大膽的留白，創造出一種流動的視覺節奏。這不僅是一次設計實驗，更是對現代美學的一次重新詮釋。"
+            }  
+        ];
+
+        const gallery = document.getElementById('gallery');
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCat = document.getElementById('modalCat');
+        const modalDesc = document.getElementById('modalDesc');
+        const closeBtn = document.getElementById('closeBtn');
+
+        works.forEach((work, index) => {
+            const item = document.createElement('div');
+            let classNames = 'gallery-item';
+            if (work.isSpecial) classNames += ' special-fit';
+            if (work.id) classNames += ' ' + work.id;
+            
+            item.className = classNames;
+            item.innerHTML = '<img src="' + work.thumb + '" alt="' + work.title + '">';
+            item.onclick = () => openModal(index);
+            gallery.appendChild(item);
+        });
+
+        function openModal(index) {
+            const work = works[index];
+            modalImg.src = work.thumb;
+            modalTitle.innerText = work.title;
+            modalCat.innerText = work.category;
+            modalDesc.innerText = work.desc;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        };
+
+        window.onclick = (event) => {
+            if (event.target == modal) {
+                closeBtn.onclick();
+            }
+        };
+    </script>
+</body>
+</html>
